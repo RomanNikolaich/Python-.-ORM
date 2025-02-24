@@ -94,7 +94,7 @@ def sale():
         session.query(Stock).filter(Stock.id == id_stock1).update({'count': Stock.count - count1})                  
         s = input("Введите 'д', если хотите добавить еще продажу: ")
         return session.commit()
-sale()
+#sale()
 
 # Функция для вывода фактов покупки по названию издательсва
 def sale_facts():
@@ -115,9 +115,21 @@ def sale_facts_2():
         print(g)
 #sale_facts_2()
 
+# НОВАЯ НЕОБХОДИМАЯ ФУНКЦИЯ
+
+def get_data(a):
+    q = session.query(Book.title, Shop.name, Sale.price, Sale.date_sale).select_from(Publisher).join(Book).join(Stock).join(Shop).join(Sale)
+    if a.isdigit():
+        w = q.filter(Publisher.id == a).all()
+    else:
+        w = q.filter(Publisher.name == a).all()
+    for book_title, shop_name, sale_price, sale_date_sale in w:
+        print(f"{book_title:<20}|{shop_name:<10}|{sale_price:<5}|{sale_date_sale}")
+
 
 session.close()
 
-
+if __name__ == '__main__':
+    get_data(a=input("Введите имя или ID издательства: "))
 
 
